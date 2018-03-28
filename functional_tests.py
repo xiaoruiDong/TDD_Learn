@@ -1,4 +1,6 @@
 from selenium import webdriver
+# key reader
+from selenium.webdriver.commonkeys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -20,20 +22,37 @@ class NewVisitorTest(unittest.TestCase):
 
         # we will notice that there is To-Do in both of the title and the head
         # assert 'To-Do' in browser.title, "Broweser title was " + browser.title
-        self.assertIn('To-Do',self.browser.title)
+        self.assertIn('To-Do', self.browser.title)
         # we also have assertEqual, assertTrue, assertFalse
-        self.fail('Finish the test.')
+
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
         # Then we will make a to-do list
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'Enter a to-do item',
+        )
 
         # we first type "Buy peacock feathers" in the text box
+        inputbox.send_keys('Buy peacock feathers')
 
         # after pressing enter, the webpage is refreshed with '1: Buy peacock feathers'
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy peacock feathers' for row in rows)
+        )
 
         # And at the time, another text box popped out
 
         # We input "Use peacock feathers to make a fly"
 
+        # To indicate where are we so far.
+        self.fail('Finish the test.')
         # Webpage refreshed again and showed these 2 To-Do
 
         # We want to know if the To-Do is saved
