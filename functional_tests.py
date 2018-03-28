@@ -1,30 +1,51 @@
 from selenium import webdriver
-browser = webdriver.Firefox()
+import unittest
 
-# we have a new website launched online and we will visit it right now
-browser.get('http://localhost:8000')
+class NewVisitorTest(unittest.TestCase):
 
-# we will notice that there is To-Do in both of the title and the head
-assert 'To-Do' in browser.title
+    # used before test
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-# Then we will make a to-do list
+        # wait for some time
+        self.browser.implicitly_wait(3)
+    # used after test, even if error occurs, tearDown also be executed
+    def tearDown(self):
+        self.browser.quit()
 
-# we first type "Buy peacock feathers" in the text box
+    # start with test is test method:
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # we have a new website launched online and we will visit it right now
+        self.browser.get('http://localhost:8000')
 
-# after pressing enter, the webpage is refreshed with '1: Buy peacock feathers'
+        # we will notice that there is To-Do in both of the title and the head
+        # assert 'To-Do' in browser.title, "Broweser title was " + browser.title
+        self.assertIn('To-Do',self.browser.title)
+        # we also have assertEqual, assertTrue, assertFalse
+        self.fail('Finish the test.')
 
-# And at the time, another text box popped out
+        # Then we will make a to-do list
 
-# We input "Use peacock feathers to make a fly"
+        # we first type "Buy peacock feathers" in the text box
 
-# Webpage refreshed again and showed these 2 To-Do
+        # after pressing enter, the webpage is refreshed with '1: Buy peacock feathers'
 
-# We want to know if the To-Do is saved
+        # And at the time, another text box popped out
 
-# We will noticed that we are now having our exclusive URL
+        # We input "Use peacock feathers to make a fly"
 
-# When we visit that url, the list is still there
+        # Webpage refreshed again and showed these 2 To-Do
 
-# we shut down the webdriver with satisfaction
+        # We want to know if the To-Do is saved
 
-browser.quit()
+        # We will noticed that we are now having our exclusive URL
+
+        # When we visit that url, the list is still there
+
+        # we shut down the webdriver with satisfaction
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+# browser.quit()
