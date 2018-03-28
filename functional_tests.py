@@ -16,6 +16,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     # start with test is test method:
     def test_can_start_a_list_and_retrieve_it_later(self):
         # we have a new website launched online and we will visit it right now
@@ -49,7 +54,7 @@ class NewVisitorTest(unittest.TestCase):
         #     "New to-do item did not appear in the table -- its text was:\n%s" % (table.text,)
         # )
 
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows],)
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # And at the time, another text box popped out
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -61,8 +66,8 @@ class NewVisitorTest(unittest.TestCase):
         # Webpage refreshed again and showed these 2 To-Do
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
-        self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
+        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         # To indicate where are we so far.
         self.fail('Finish the test.')
