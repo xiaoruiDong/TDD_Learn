@@ -1,6 +1,7 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 from lists.views import home_page
 
@@ -28,7 +29,11 @@ class HomePageTest(TestCase):
         # The reason using b'' is because in the response.content, the content is in origin code
         # not in python code.
 
-        self.assertTrue(response.content.startswith(b'<html>'))
-        self.assertIn(b'<title>To-Do lists</title>', response.content)
-        self.assertTrue(response.content.endswith(b'</html>'))
+        # self.assertTrue(response.content.startswith(b'<html>'))
+        # self.assertIn(b'<title>To-Do lists</title>', response.content)
+        # self.assertTrue(response.content.endswith(b'</html>'))
 
+        # We can use render_to_string to test our templates
+        expected_html = render_to_string('home.html')
+        # decode translate the Python language to Unicode
+        self.assertEqual(response.content.decode(), expected_html)

@@ -4,4 +4,9 @@ from django.http import HttpResponse
 
 
 def home_page(request):
-    return HttpResponse('<html><title>To-Do lists</title></html>')
+    # use httpresponse
+    # return HttpResponse('<html><title>To-Do lists</title>')
+
+    # Otherwise we can use render, The first object is the request object,
+    # the second is the templates name
+    return render(request, 'home.html')
