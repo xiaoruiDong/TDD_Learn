@@ -1,6 +1,6 @@
 from selenium import webdriver
 # key reader
-from selenium.webdriver.commonkeys import Keys
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
