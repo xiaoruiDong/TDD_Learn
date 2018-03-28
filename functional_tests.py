@@ -49,14 +49,24 @@ class NewVisitorTest(unittest.TestCase):
         #     "New to-do item did not appear in the table -- its text was:\n%s" % (table.text,)
         # )
 
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows],)
+
         # And at the time, another text box popped out
+        inputbox = self.browser.find_element_by_id('id_new_item')
 
         # We input "Use peacock feathers to make a fly"
+        inputbox.send_keys('Use peacock feathers to make a fly')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Webpage refreshed again and showed these 2 To-Do
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
 
         # To indicate where are we so far.
         self.fail('Finish the test.')
-        # Webpage refreshed again and showed these 2 To-Do
+
 
         # We want to know if the To-Do is saved
 
