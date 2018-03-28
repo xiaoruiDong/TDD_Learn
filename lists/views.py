@@ -9,4 +9,11 @@ def home_page(request):
 
     # Otherwise we can use render, The first object is the request object,
     # the second is the templates name
-    return render(request, 'home.html')
+    # if request.method == 'POST':
+    #     return HttpResponse(request.POST['item_text'])
+    # return render(request, 'home.html')
+
+    #return render(request, 'home.html', {'new_item_text': request.POST.['item_text'], })
+    return render(request, 'home.html', {
+        'new_item_text': request.POST.get('item_text', ''),
+    })
