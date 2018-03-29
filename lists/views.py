@@ -26,10 +26,10 @@ def home_page(request):
     # })
 
     # version 3
-    if request.method == 'POST':
-        Item.objects.create(text=request.POST['item_text'])
-        # by using create, we dont have to use save()
-        return redirect('/lists/the-only-list-in-the-world/')
+    # if request.method == 'POST':
+    #     Item.objects.create(text=request.POST['item_text'])
+    #     # by using create, we dont have to use save()
+    #     return redirect('/lists/the-only-list-in-the-world/')
 
     return render(request, 'home.html',)
 
@@ -38,3 +38,10 @@ def view_list(request):
 
     items = Item.objects.all()
     return render(request, 'list.html', {'items': items})
+
+
+def new_list(request):
+
+    # This view is just like a redirect station i think
+    Item.objects.create(text=request.POST['item_text'])
+    return redirect('/lists/the-only-list-in-the-world/')
