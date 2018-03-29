@@ -1,11 +1,18 @@
+from django.test import LiveServerTestCase
+
 from selenium import webdriver
 # key reader
 from selenium.webdriver.common.keys import Keys
-import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 import unittest
 import time
 
-class NewVisitorTest(unittest.TestCase):
+#class NewVisitorTest(unittest.TestCase):
+
+
+class NewVistorTest(LiveServerTestCase):
 
     # used before test
     def setUp(self):
@@ -25,7 +32,10 @@ class NewVisitorTest(unittest.TestCase):
     # start with test is test method:
     def test_can_start_a_list_and_retrieve_it_later(self):
         # we have a new website launched online and we will visit it right now
-        self.browser.get('http://localhost:8000')
+        # self.browser.get('http://localhost:8000')
+
+        # using live server url
+        self.browser.get(self.live_server_url)
 
         # we will notice that there is To-Do in both of the title and the head
         # assert 'To-Do' in browser.title, "Broweser title was " + browser.title
@@ -53,6 +63,11 @@ class NewVisitorTest(unittest.TestCase):
         #     "New to-do item did not appear in the table -- its text was:\n%s" % (table.text,)
         # )
 
+        # some magic lines that can avoid stale problem
+        WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
+            (By.ID, 'id_list_table'), 'Buy peacock feathers'
+        ))
+
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # And at the time, another text box popped out
@@ -66,6 +81,11 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
+
+        WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
+            (By.ID, 'id_list_table'), 'Buy peacock feathers'
+        ))
+
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         # To indicate where are we so far.
@@ -80,8 +100,8 @@ class NewVisitorTest(unittest.TestCase):
 
         # we shut down the webdriver with satisfaction
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#    unittest.main()
 
 
 # browser.quit()
