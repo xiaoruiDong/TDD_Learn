@@ -58,10 +58,16 @@ class NewVistorTest(LiveServerTestCase):
         # after pressing enter, the webpage is refreshed with '1: Buy peacock feathers'
         inputbox.send_keys(Keys.ENTER)
 
+        # Assertion used to know if the key words are contained
         # self.assertTrue(
         #     any(row.text == '1: Buy peacock feathers' for row in rows),
         #     "New to-do item did not appear in the table -- its text was:\n%s" % (table.text,)
         # )
+
+        # create the owner exclusive url
+        edith_list_url = self.browser.current_url
+        # regex used to testify whether strings and canonical expression is matched
+        self.assertRegexpMatches(edith_list_url, '/lists/.+')
 
         # some magic lines that can avoid stale problem
         WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
@@ -78,8 +84,10 @@ class NewVistorTest(LiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
 
         # Webpage refreshed again and showed these 2 To-Do
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
+        WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
+            (By.ID, 'id_list_table'), 'Use peacock feathers to make a fly'
+        ))
+
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
@@ -91,6 +99,33 @@ class NewVistorTest(LiveServerTestCase):
         # To indicate where are we so far.
         self.fail('Finish the test.')
 
+        ## Francis also visit the website
+        ## we use a new webdriver and should make sure that edith info is not leaked
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Francis see the homepage and cannot see Edith's info
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('make a fly', page_text)
+
+        # Francis also add a new item and a new list
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Francis also get his exclusive url
+        francis_list_url = self.browser.current_url
+        # assertRegex is in Python3, we should use assertRegexpMatches()
+        self.assertRegexpMatches(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        # Within this page, there is still no edith's list
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
 
         # We want to know if the To-Do is saved
 
