@@ -96,9 +96,6 @@ class NewVistorTest(LiveServerTestCase):
 
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
-        # To indicate where are we so far.
-        self.fail('Finish the test.')
-
         ## Francis also visit the website
         ## we use a new webdriver and should make sure that edith info is not leaked
         self.browser.quit()
@@ -116,6 +113,12 @@ class NewVistorTest(LiveServerTestCase):
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
 
+        WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
+             (By.ID, 'id_list_table'), 'Buy milk'
+        ))
+
+        self.check_for_row_in_list_table('1: Buy milk')
+
         # Francis also get his exclusive url
         francis_list_url = self.browser.current_url
         # assertRegex is in Python3, we should use assertRegexpMatches()
@@ -128,6 +131,9 @@ class NewVistorTest(LiveServerTestCase):
         self.assertIn('Buy milk', page_text)
 
         # We want to know if the To-Do is saved
+
+        # To indicate where are we so far.
+        self.fail('Finish the test.')
 
         # We will noticed that we are now having our exclusive URL
 
