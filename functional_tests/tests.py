@@ -64,15 +64,15 @@ class NewVistorTest(LiveServerTestCase):
         #     "New to-do item did not appear in the table -- its text was:\n%s" % (table.text,)
         # )
 
-        # create the owner exclusive url
-        edith_list_url = self.browser.current_url
-        # regex used to testify whether strings and canonical expression is matched
-        self.assertRegexpMatches(edith_list_url, '/lists/.+')
-
         # some magic lines that can avoid stale problem
         WebDriverWait(self.browser, 10).until(expected_conditions.text_to_be_present_in_element(
             (By.ID, 'id_list_table'), 'Buy peacock feathers'
         ))
+
+        # create the owner exclusive url
+        edith_list_url = self.browser.current_url
+        # regex used to testify whether strings and canonical expression is matched
+        self.assertRegexpMatches(edith_list_url, '/lists/.+')
 
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
