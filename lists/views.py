@@ -31,8 +31,7 @@ def home_page(request):
         # by using create, we dont have to use save()
         return redirect('/lists/the-only-list-in-the-world/')
 
-    items = Item.objects.all()
-    return render(request, 'home.html', {'items': items})
+    return render(request, 'home.html',)
 
 
 def view_list(request):

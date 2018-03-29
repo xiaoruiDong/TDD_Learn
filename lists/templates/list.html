@@ -3,7 +3,8 @@
     <h1>
         Your To-Do list
     </h1>
-    <form method="POST">
+    <!-- page other than home should add action="/" to process POST-->
+    <form method="POST" action="/">
     <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
     {% csrf_token %}
     </form>
