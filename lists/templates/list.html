@@ -1,19 +1,35 @@
-<html>
-    <title>To-Do lists</title>
-    <h1>
-        Your To-Do list
-    </h1>
-    <!-- page other than home should add action="/" to process POST-->
-    <form method="POST" action="/lists/{{ list.id }}/add_item">
+{% extends 'base.html' %}
 
-    <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
-    {% csrf_token %}
-    </form>
+{% block header_text %}Your To-Do list{% endblock %}
 
+{% block form_action %}/lists/{{ list.id }}/add_item{% endblock %}
+
+{% block table %}
     <table id="id_list_table">
         <!--list.item_set.all is reverse lookup-->
         {% for item in list.item_set.all %}
             <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
         {% endfor %}
     </table>
-</html>
+{% endblock %}
+
+<!--<html>-->
+    <!--<title>To-Do lists</title>-->
+    <!--<h1>-->
+        <!--Your To-Do list-->
+    <!--</h1>-->
+    <!--&lt;!&ndash; page other than home should add action="/" to process POST&ndash;&gt;-->
+    <!--<form method="POST" action="/lists/{{ list.id }}/add_item">-->
+
+    <!--<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />-->
+    <!--{% csrf_token %}-->
+    <!--</form>-->
+
+    <!--<table id="id_list_table">-->
+        <!--&lt;!&ndash;list.item_set.all is reverse lookup&ndash;&gt;-->
+        <!--{% for item in list.item_set.all %}-->
+            <!--<tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>-->
+        <!--{% endfor %}-->
+    <!--</table>-->
+<!--</html>-->
+

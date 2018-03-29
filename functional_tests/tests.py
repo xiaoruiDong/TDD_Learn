@@ -36,6 +36,7 @@ class NewVistorTest(LiveServerTestCase):
 
         # using live server url
         self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
 
         # we will notice that there is To-Do in both of the title and the head
         # assert 'To-Do' in browser.title, "Broweser title was " + browser.title
@@ -47,6 +48,10 @@ class NewVistorTest(LiveServerTestCase):
 
         # Then we will make a to-do list
         inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width']/2, 512, delta=5
+        )
+
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
                 'Enter a to-do item',
