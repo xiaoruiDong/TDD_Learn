@@ -31,4 +31,6 @@ def home_page(request):
         # by using create, we dont have to use save()
         return redirect('/')
 
-    return render(request, 'home.html')
+    items = Item.objects.all()
+
+    return render(request, 'home.html', {'items': items})
