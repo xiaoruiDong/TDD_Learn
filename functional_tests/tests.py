@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import unittest
 import time
+import sys
 
 #class NewVisitorTest(unittest.TestCase):
 
@@ -17,12 +18,29 @@ import time
 
 class NewVisitorTest(StaticLiveServerTestCase):
 
+    @classmethod
+    # setUpClass is provided by unittest
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return  #
+        # in python2 we should pass current class name to the super
+        StaticLiveServerTestCase.setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            StaticLiveServerTestCase.tearDownClass()
+
     # used before test
     def setUp(self):
         self.browser = webdriver.Firefox()
 
         # wait for some time
         self.browser.implicitly_wait(3)
+
     # used after test, even if error occurs, tearDown also be executed
     def tearDown(self):
         self.browser.quit()
@@ -38,7 +56,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # self.browser.get('http://localhost:8000')
 
         # using live server url
-        self.browser.get(self.live_server_url)
+        # self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(800, 600)
 
         # we will notice that there is To-Do in both of the title and the head
@@ -110,7 +129,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser = webdriver.Firefox()
 
         # Francis see the homepage and cannot see Edith's info
-        self.browser.get(self.live_server_url)
+        # self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
 
         self.assertNotIn('Buy peacock feathers', page_text)
