@@ -1,5 +1,5 @@
-from django.test import LiveServerTestCase
-
+#from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 # key reader
 from selenium.webdriver.common.keys import Keys
@@ -12,7 +12,10 @@ import time
 #class NewVisitorTest(unittest.TestCase):
 
 
-class NewVistorTest(LiveServerTestCase):
+#class NewVisitorTest(LiveServerTestCase):
+
+
+class NewVisitorTest(StaticLiveServerTestCase):
 
     # used before test
     def setUp(self):
@@ -36,7 +39,7 @@ class NewVistorTest(LiveServerTestCase):
 
         # using live server url
         self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
+        self.browser.set_window_size(800, 600)
 
         # we will notice that there is To-Do in both of the title and the head
         # assert 'To-Do' in browser.title, "Broweser title was " + browser.title
@@ -49,7 +52,7 @@ class NewVistorTest(LiveServerTestCase):
         # Then we will make a to-do list
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width']/2, 512, delta=5
+            inputbox.location['x'] + inputbox.size['width']/2, 400, delta=5
         )
 
         self.assertEqual(
